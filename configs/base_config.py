@@ -5,10 +5,11 @@ class BaseConfig:
     dim_ffn: int = 2048
     dropout: float = 0.1    
     
-    # class Encoder:
-    #     dim: int  = 512 * 4
-    #     num_layers: int = 4
-    #     dropout: float = 0.1
+    class Encoder:
+        num_layers = 6
+        # dim = 512 * 4
+        # num_layers = 4
+        # dropout = 0.1
     
     # class Decoder:
     #     dim = 512 * 4

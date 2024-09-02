@@ -62,10 +62,12 @@ class MultiHeadAttention(nn.Module):
         K = self.linear_k(K).view(K.size(0), -1, self.num_heads, self.dim_k).transpose(1, 2) # (batch_size, num_heads, len_seq, dim_k)
         V = self.linear_v(V).view(V.size(0), -1, self.num_heads, self.dim_v).transpose(1, 2) # (batch_size, num_heads, len_seq, dim_v)
         
-        output, attention = self.scaled_dot_product_attention(Q, K, V, mask=mask) # (batch_size, num_heads, len_seq, dim_v)
+        output, _ = self.scaled_dot_product_attention(Q, K, V, mask=mask) # (batch_size, num_heads, len_seq, dim_v)
         
-        output = output.transpose(1, 2).contiguous().view(output.size(0), -1, self.num_heads * self.dim_v)
-        
+        output = output.transpose(1, 2).contiguous().view(output.size(0), -1, self.num_heads * self.dim_v) # aggragate heads
+        output = self.linear_output(output)
+        return output
+
 
 if __name__ == "__main__":
     a = torch.zeros(1, 2, 3)
