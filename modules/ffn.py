@@ -9,10 +9,11 @@ class FeedForwardNetwork(nn.Module):
         super(FeedForwardNetwork, self).__init__()
         self.hidden_dim = cfg.dim_ffn
         
-        self.positional_encoding = torch.zeros(cfg.max_len, cfg.dim_embed)
+        self.linear1 = nn.Linear(cfg.dim_embed, self.hidden_dim)
+        self.linear2 = nn.Linear(self.hidden_dim, cfg.dim_embed)
+        self.gelu = nn.GELU()
+        self.dropout = nn.Dropout(cfg.dropout)
         
-        # self.positional_encoding.requires_grad = False
-        self.register_buffer("pe", self.positional_encoding)
         
 
     def forward(self, x):
@@ -21,6 +22,9 @@ class FeedForwardNetwork(nn.Module):
         Args:
             x (torch.Tensor): size (batch_size, seq_len, dim_embed)
         """
-        self.pe 
-        return 
+        x = self.linear1(x)
+        x = self.gelu(x)
+        x = self.linear2(x)
+        x = self.dropout(x)
+        return x
         
